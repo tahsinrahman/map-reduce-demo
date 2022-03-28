@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package mapreduce.v1;
+
+enum State {
+  STATE_IDLE_UNSPECIFIED = 0;
+  STATE_IN_PROGRESS = 1;
+  STATE_COMPLETED = 2;
+}
+
+message MapTask {
+  int32 task_id = 1;
+  string input_file = 2;
+  State state = 3;
+}
+
+message ReduceTask {
+  int32 task_id = 1;
+  repeated string intermediate_files = 2;
+  State state = 3;
+}
+
+service MapReduceService {
+  rpc AskForMapTask(AskForMapTaskRequest) returns (stream AskForMapTaskResponse) {}
+  rpc AskForReduceTask(AskForReduceTaskRequest) returns (stream AskForReduceTaskResponse) {}
+  rpc FinishMapTask(FinishMapTaskRequest) returns (FinishMapTaskResponse) {}
+  rpc FinishReduceTask(FinishReduceTaskRequest) returns (FinishReduceTaskResponse) {}
+}
+
+message AskForMapTaskRequest {}
+message AskForMapTaskResponse {
+  MapTask task = 2;
+}
+
+message AskForReduceTaskRequest {}
+message AskForReduceTaskResponse {
+  ReduceTask task = 2;
+}
+
+message FinishMapTaskRequest {
+  int32 task_id = 1;
+  repeated string temporary_intermediate_files = 2;
+}
+message FinishMapTaskResponse {}
+
+message FinishReduceTaskRequest {
+  int32 task_id = 1;
+}
+message FinishReduceTaskResponse {}
