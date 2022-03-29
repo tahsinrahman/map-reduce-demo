@@ -10,6 +10,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "map-reduce",
 	Short: "",
+	// Args:  cobra.NoArgs,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
